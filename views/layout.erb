@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+<body>
+<h1>PokerFace Movie DB World </h1>
+
+<ul class='list'>
+  <li><a href="/">Search Home</a></li>
+  <li><a href="/about">About</a></li>
+  <% if session[:id]!=nil %>
+  <li><a href="/logout"> Logout : <%= current_user['name']%></a></li>
+  <li><a href="">User Comment</a></li>
+  <%else%>
+  <li><a href="/login">Login/Signin</a></li>
+  <%end%>
+</ul>
+<br>
+  <%= yield %>
+<br>
+<% if session[:id]!=nil %>
+
+  <%# <% if current_user['accesslevel'].to_i >= 2 %>
+  <%# <p> Hello Admin</p> %>
+  <%# <canvas id="resource" width="300" height="200"></canvas> %>
+  <%# <canvas id="requester" width="300" height="200"></canvas> %>
+  <%# <script src="application.js" ></script> %>
+  <%# <%end%> %>
+
+<%end%>
+
+
+</body>
+
+</html>

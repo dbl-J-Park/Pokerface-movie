@@ -1,0 +1,6 @@
+<ul>
+    <% @result["Search"].each do |elem| %>
+    <li> <a href="/movie/<%= elem["Title"] %>"> <%= elem["Title"] %> </li>
+
+    <% end %>
+</ul>

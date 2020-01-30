@@ -1,0 +1,19 @@
+.list{
+    display: flex;
+    flex-direction:row;
+    justify-content: space-around;
+    list-style-type: none;
+    
+}
+.list li{
+  margin:20px;
+}
+body{
+    background-color: rgb(127, 204, 255);
+}
+.movielist{
+  display: flex;
+  flex-direction:row;
+  list-style-type: none;
+  justify-content : space-between;
+}

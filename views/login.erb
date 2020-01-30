@@ -1,0 +1,16 @@
+
+<h3>Login</h3>
+<form action='/login' method='post'>
+    <label for="">User Email</label>
+    <input type="email" name="user_email">
+    <label for="">Password</label>
+    <input type="password" name="user_passward">
+    <button>submit</button>
+</form>
+<p><%=@login_status %></p>
+<br>
+<br>
+<a href="/signin">Sign In</a>
+
+<p>Enrolled user can access API DB and server DB as well.</p>
+<p>Ananimous user only can see movie lists.</p>
