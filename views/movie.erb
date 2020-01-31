@@ -1,7 +1,32 @@
-<p> <%= @movie_title%></p>
-<p> <%= @movie_year %></p>
-<p> <%= @movie_runtime %></p>
-<p> <%= @movie_genre %></p>
-<p> <%= @movie_actors %></p>
-<p> <%= @movie_award %></p>
-<div> <img src=<%= @movie_image %> alt="MOVIE" height:"300" width="300"> </div>
+<div class="singleMovie">
+    <table>
+        <tr>
+            <td>Movie_Title</td>
+            <td><%= @movie_title%></td> 
+        </tr>
+        <tr>
+            <td>Movie_Year</td>
+            <td><%= @movie_year%></td> 
+        </tr>
+        <tr>
+            <td>Movie_Runtime</td>
+            <td><%= @movie_runtime%></td> 
+        </tr>
+        <tr>
+            <td>Movie_Genre</td>
+            <td><%= @movie_genre%></td> 
+        </tr>
+        <tr>
+            <td>Movie_Actors</td>
+            <td><%= @movie_actors%></td> 
+        </tr>
+        <tr>
+            <td>Movie_Awards</td>
+            <td><%= @movie_award%></td> 
+        </tr>
+    </table>
+
+    <div> <img src=<%= @movie_image %> alt="MOVIE" height:"300" width="300"> </div>
+</div>
+
+

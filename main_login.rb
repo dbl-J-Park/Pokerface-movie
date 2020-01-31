@@ -30,8 +30,8 @@ end
 
 
 post '/login' do
-  sql="select * from user_db_table where email = '#{params[:user_email]}';"
-  results = dbconnect(sql)
+  sql="select * from user_db_table where email = $1;"
+  results = dbconnect(sql,[params[:user_email]])
   if results.count ==1
     if varify_password?(results[0]['processed_password'],params[:user_passward])
       session[:id] = results[0]['id']
@@ -49,17 +49,17 @@ end
 
 
 post '/signin' do
-  sql ="select * from user_db_table where email = '#{params[:user_email]}';"
-  result = dbconnect(sql)
+  sql ="select * from user_db_table where email = $1;"
+  result = dbconnect(sql,params[:user_email])
   if result.count == 1
     redirect'/login'
   else
     secure_password = password_hiding(params[:user_passward])
-    sql= "insert into user_db_table (name, email, processed_password) values ('#{params[:user_name]}','#{params[:user_email]}','#{secure_password}');"
-    dbconnect(sql)
+    sql= "insert into user_db_table (name, email, processed_password) values ($1,$2,$3);"
+    dbconnect(sql,[params[:user_name],params[:user_email],secure_password])
 
-    sql="select * from user_db_table where email = '#{params[:user_email]}';"
-    results = dbconnect(sql)
+    sql="select * from user_db_table where email = $1;"
+    results = dbconnect(sql,params[:user_email])
     if results.count ==1
       if varify_password?(results[0]['processed_password'],params[:user_passward])
         session[:id] = results[0]['id']

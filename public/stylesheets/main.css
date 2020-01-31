@@ -17,3 +17,19 @@ body{
   list-style-type: none;
   justify-content : space-between;
 }
+.singleMovie{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.about{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.storiesabout{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+

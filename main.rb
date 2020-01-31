@@ -16,11 +16,27 @@ enable :sessions
 
 helpers do
   def current_user
-      sql = "select * from user_db_table where id = #{session[:id]};"
-      result =dbconnect(sql)[0]
+      sql = "select * from user_db_table where id = $1;"
+      result =dbconnect(sql,[session[:id]])[0]
   end
 
 end
+
+def escape_naming(movie)
+  moviearr = []
+  movie = movie.chars
+  movie.each do |item|
+    if item == "/"|| item == "'"||item == "!"||item == ","
+      moviearr << "/"
+      moviearr << item
+    else
+      moviearr << item
+    end 
+  end
+  movie = moviearr.join("")
+  return movie
+end
+
 
 # using different layout 
 # get '/' do
@@ -42,8 +58,9 @@ end
 
 get '/movie/:movie' do
   if login?
-    sql ="select * from movie_db_table where Title = '#{params[:movie]}';"
-    result = dbconnect(sql)
+    sql ="select * from movie_db_table where Title = $1;"
+    
+    result = dbconnect(sql,[params[:movie]])
     
     if result.count ==1
       # retriving the data in the database
@@ -58,12 +75,12 @@ get '/movie/:movie' do
 
       #updating frequecy in movie_db_table
       frequency = result[0]["frequency"].to_i + 1
-       sql = "UPDATE movie_db_table SET frequency = #{frequency} where title = '#{@movie_title}';"
-       dbconnect(sql)
+       sql = "UPDATE movie_db_table SET frequency = $1 where title = $2;"
+       dbconnect(sql,[frequency,@movie_title])
       
       # generating a record in request_db_table
-      sql = "insert into request_db_table (db_id, requester_id, origine) values(#{result[0]['id']},#{session[:id]},'DB');"
-      dbconnect(sql)
+      sql = "insert into request_db_table (db_id, requester_id, origine) values($1,$2,'DB');"
+      dbconnect(sql,[result[0]['id'],session[:id]])
 
      
     
@@ -71,6 +88,8 @@ get '/movie/:movie' do
       # retriving a new data
       url = "http://omdbapi.com/?t=#{params[:movie]}&apikey=#{ ENV['OMDB_API_KEY'] }"
       result = HTTParty.get(url)
+      # megadb = result.to_json
+
       @movie_name = result["Title"]
       @movie_year = result["Year"]
       @movie_runtime = result["Runtime"]
@@ -81,24 +100,28 @@ get '/movie/:movie' do
       @movie_award = result["Awards"]
 
       # generating a record
-      sql= "insert into movie_db_table (Title,Year,Runtime,Genre,Actors,Ratings,Poster,Awards,mega_data) values ('#{result["Title"]}','#{result["Year"]}','#{result["Runtime"]}','#{result["Genre"]}','#{result["Actors"]}','#{result["Ratings"]}','#{result["Poster"]}','#{result["Awards"]}','#{result}');"
-      dbconnect(sql)
+      sql= "insert into movie_db_table (Title,Year,Runtime,Genre,Actors,Ratings,Poster,Awards) values ($1,$2,$3,$4,$5,$6,$7,$8);"
+      dbconnect(sql,[result["Title"],result["Year"],result["Runtime"],result["Genre"],result["Actors"],result["Ratings"],result["Poster"],result["Awards"]])
 
       # generating a record in request_db_table
 
 
        # generating a record in request_db_table
-       sql = "select * from movie_db_table where title = '#{@movie_name}';"
-       entryId =dbconnect(sql)[0]['id'].to_i
-       sql = "insert into request_db_table (db_id, requester_id, origine) values(#{entryId},#{session[:id]},'API');"
-       dbconnect(sql)
+       sql = "select * from movie_db_table where title = $1;"
+       entryId =dbconnect(sql,[@movie_name])[0]['id'].to_i
+       sql = "insert into request_db_table (db_id, requester_id, origine) values($1,$2,'API');"
+       dbconnect(sql,[entryId,session[:id]])
     end
   else
     redirect '/login'
   end  
   erb:movie
 end
+
   
+get '/about' do
+ erb:about
+end
 
 
 
